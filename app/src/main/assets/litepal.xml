@@ -1,0 +1,11 @@
+<litepal>
+    <dbname value="weather_app"/>
+
+    <version value="1"/>
+
+    <list>
+        <mapping class="package cn.weseewe.android.weatherapp.db.Province"/>
+        <mapping class="package cn.weseewe.android.weatherapp.db.City"/>
+        <mapping class="package cn.weseewe.android.weatherapp.db.County"/>
+    </list>
+</litepal>
