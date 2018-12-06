@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">WeatherApp</string>
+    <string name="app_name">Leaf Weather</string>
+    <string name="temp_c">°C</string>
+    <string name="temp_f">°F</string>
+    <string name="bt_txt_setting">设置</string>
+    <string name="bt_txt_more">more</string>
+    <string name="item_settings">settings</string>
+    <string name="item_loc_in_map">loc in map</string>
 </resources>
