@@ -8,7 +8,6 @@ import android.util.Log;
 
 import java.util.Locale;
 
-import cn.weseewe.android.weatherapp.gson.Weather;
 
 public class ChooseAreaActivity extends AppCompatActivity {
 
