@@ -1,4 +1,9 @@
-package cn.weseewe.android.weatherapp.db;
+package cn.weseewe.android.weatherapp.gson;
 
-public class Update {
+import org.litepal.crud.DataSupport;
+
+import java.io.Serializable;
+
+public class Update  implements Serializable {
+    public String utc;
 }

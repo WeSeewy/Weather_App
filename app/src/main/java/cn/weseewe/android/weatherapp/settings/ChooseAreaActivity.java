@@ -1,4 +1,4 @@
-package cn.weseewe.android.weatherapp;
+package cn.weseewe.android.weatherapp.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.Locale;
+import cn.weseewe.android.weatherapp.R;
 
 
 public class ChooseAreaActivity extends AppCompatActivity {

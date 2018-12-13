@@ -1,9 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SettingActivity">
+    android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#fff"
+            android:text="@string/settings_up"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_back"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout android:id="@+id/set_loc_layout"
+            android:layout_marginStart="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/location"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/set_loc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:text="长沙"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/lightpink"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <LinearLayout android:id="@+id/set_unit_layout"
+            android:layout_marginStart="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/temperature_units"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/set_unit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:text="@string/centigrade"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/lightpink"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <LinearLayout
+            android:layout_marginStart="20dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="@string/weather_notification"
+                    android:textColor="@color/black"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:id="@+id/set_notify"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:text="@string/disable"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/set_chechbox_notify"
+                android:layout_marginStart="85dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="10dp"
+                android:gravity="center|end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/lightpink"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </LinearLayout>
+</LinearLayout>

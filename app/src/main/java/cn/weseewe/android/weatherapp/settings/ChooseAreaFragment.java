@@ -1,5 +1,7 @@
-package cn.weseewe.android.weatherapp;
+package cn.weseewe.android.weatherapp.settings;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.weseewe.android.weatherapp.MainActivity;
+import cn.weseewe.android.weatherapp.R;
 import cn.weseewe.android.weatherapp.db.City;
 import cn.weseewe.android.weatherapp.db.County;
 import cn.weseewe.android.weatherapp.db.Province;
@@ -29,14 +33,17 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+import static cn.weseewe.android.weatherapp.MainActivity.SPKEY_SPSETTING;
+
 public class ChooseAreaFragment extends Fragment {
 
     private static final String TAG = "ChooseAreaFragment";
-
     public static final int LEVEL_PROVINCE = 0;
     public static final int LEVEL_CITY = 1;
     public static final int LEVEL_COUNTY = 2;
 
+    private SharedPreferences sp_setting;
     private ProgressDialog progressDialog;
 
     private TextView titleText;
@@ -58,6 +65,9 @@ public class ChooseAreaFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG,"onCreateView");
         View view = inflater.inflate(R.layout.choose_area_frag, container, false);
+
+        sp_setting= getActivity().getSharedPreferences(SPKEY_SPSETTING,MODE_PRIVATE);
+
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
         listView = (ListView) view.findViewById(R.id.list_view);
@@ -76,19 +86,26 @@ public class ChooseAreaFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (currentLevel == LEVEL_PROVINCE) {
+                if (currentLevel == LEVEL_PROVINCE) {// 省级列表
                     selectedProvince = provinceList.get(position);
                     queryCities();
-                } else if (currentLevel == LEVEL_CITY) {
+                } else if (currentLevel == LEVEL_CITY) {// 市级列表
                     selectedCity = cityList.get(position);
                     queryCounties();
-//                } else if (currentLevel == LEVEL_COUNTY) {
-//                    String weatherId = countyList.get(position).getWeatherId();
+                } else if (currentLevel == LEVEL_COUNTY) {// 县级列表
+                    String county = countyList.get(position).getCountyName();
 //                    if (getActivity() instanceof MainActivity) {
-//                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
-//                        intent.putExtra("weather_id", weatherId);
-//                        startActivity(intent);
-//                        getActivity().finish();
+
+                    // 存地址
+                    SharedPreferences.Editor editor = sp_setting.edit();
+                    editor.putString(MainActivity.SPKEY_LOCATION, county);
+                    editor.apply();
+
+                    // 回到主界面，传回地址，不负责查询天气
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra(MainActivity.SPKEY_LOCATION, county);
+                    startActivity(intent);
+                    getActivity().finish();
 //                    } else if (getActivity() instanceof WeatherActivity) {
 //                        WeatherActivity activity = (WeatherActivity) getActivity();
 //                        activity.drawerLayout.closeDrawers();
@@ -107,6 +124,10 @@ public class ChooseAreaFragment extends Fragment {
                     queryCities();
                 } else if (currentLevel == LEVEL_CITY) {
                     queryProvinces();
+                }else if(currentLevel==LEVEL_PROVINCE){
+                    Intent intent=new Intent(getActivity(),SettingActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -121,7 +142,6 @@ public class ChooseAreaFragment extends Fragment {
     private void queryProvinces() {
         Log.d(TAG,"queryProvinces()");
         titleText.setText("中国");
-        backButton.setVisibility(View.GONE);// todo:delete
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();
@@ -140,8 +160,9 @@ public class ChooseAreaFragment extends Fragment {
     /**
      * 查询选中省内所有的市，优先从数据库查询，如果没有查询到再去服务器上查询。
      */
-    private void queryCities() {        titleText.setText(selectedProvince.getProvinceName());
-        backButton.setVisibility(View.VISIBLE);// todo:delete
+    private void queryCities() {
+        titleText.setText(selectedProvince.getProvinceName());
+
         cityList = DataSupport.where("provinceid = ?",
                 String.valueOf(selectedProvince.getId())).find(City.class);
         if (cityList.size() > 0) {
@@ -164,7 +185,6 @@ public class ChooseAreaFragment extends Fragment {
      */
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
-        backButton.setVisibility(View.VISIBLE);// todo:delete
         countyList = DataSupport.where("cityid = ?",
                 String.valueOf(selectedCity.getId())).find(County.class);
         if (countyList.size() > 0) {

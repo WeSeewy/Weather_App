@@ -2,14 +2,46 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/loc_in_map"
+
+    <item android:id="@+id/share"
+        android:title="@string/share"
+        android:icon="@drawable/ic_share"
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/loc_in_map"
         android:title="@string/item_loc_in_map"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/ic_location"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/settings"
+
+    <item android:id="@+id/settings"
         android:title="@string/item_settings"
         app:showAsAction="never"
-        android:icon="@drawable/ic_settings"/>
+        android:icon="@drawable/ic_settings">
+        <!--<menu>-->
+            <!--<item android:id="@+id/setting_loc"-->
+                <!--android:title="@string/location"/>-->
+
+            <!--<item android:id="@+id/setting_temp_unit"-->
+                <!--android:title="@string/temperature_unit">-->
+                <!--<menu>-->
+                    <!--<item android:id="@+id/setting_centigrade"-->
+                        <!--android:title="@string/centigrade"/>-->
+                    <!--<item android:id="@+id/setting_fahrenheit"-->
+                        <!--android:title="@string/fahrenheit"/>-->
+                <!--</menu>-->
+            <!--</item>-->
+
+            <!--<item android:id="@+id/setting_notify"-->
+                <!--android:title="@string/weather_notify">-->
+                <!--<menu>-->
+                    <!--<item android:id="@+id/notify_yes"-->
+                        <!--android:title="@string/yes"/>-->
+                    <!--<item android:id="@+id/notify_no"-->
+                        <!--android:title="@string/no"/>-->
+                <!--</menu>-->
+            <!--</item>-->
+        <!--</menu>-->
+    </item>
+
 </menu>

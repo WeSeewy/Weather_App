@@ -11,10 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import cn.weseewe.android.weatherapp.gson.Weather;
+import cn.weseewe.android.weatherapp.gson.DailyForecast;
+import cn.weseewe.android.weatherapp.gson.HeWeather6;
 
 public class WeatherContentMoreFragment extends Fragment {
-    private static String TAG="WeatherContentMoreFragment";
+    private static final String TAG="WeatherContentMoreFrag";
     private View view;
     TextView tv_hum,tv_pres,tv_vis,tv_wind;
 
@@ -25,19 +26,16 @@ public class WeatherContentMoreFragment extends Fragment {
         view=inflater.inflate(R.layout.weather_content_more_frag,container,false);// here frag
         return view;
     }
-    public void refresh(){
-        Log.d(TAG,"refresh()");
-        Weather wt=Weather.get(getActivity());
-        refresh(wt);
-    }
 
-    public void refresh(Weather wt){
+    public void refresh(DailyForecast wt){
         Log.d(TAG,"refresh(wt)");
-        String hum=wt.getHum();
-        String pres=wt.getPres();
-        String vis=wt.getVis();
-        String wind_dir=wt.getWind_dir();
-        String wind_spd=wt.getWind_spd();
+        String hum=wt.hum;
+        String pres=wt.pres;
+        String vis=wt.vis;
+        String wind_sc=wt.wind_sc;
+        String wind_dir=wt.wind_dir;
+        String wind_spd=wt.wind_spd;
+
 
         View detailMoreLayout=view.findViewById(R.id.detail_more_layout);
         detailMoreLayout.setVisibility(View.VISIBLE);
@@ -47,9 +45,14 @@ public class WeatherContentMoreFragment extends Fragment {
         tv_vis=(TextView)view.findViewById(R.id.detail_vis);
         tv_wind=(TextView)view.findViewById(R.id.detail_wind);
 
-        tv_vis.setText("能见度："+vis);
-        tv_hum.setText("湿度："+hum);
-        tv_pres.setText("大气压强："+pres);
-        tv_wind.setText("风："+wind_dir+" "+wind_spd);
+
+        String swind="风："+wind_sc+" "+wind_dir+" "+wind_spd+"km/h";
+        String shum="湿度："+hum+"%";
+        String svis="能见度："+vis+"km";
+        String spres="大气压强："+pres+"hPa";
+        tv_wind.setText(swind);
+        tv_hum.setText(shum);
+        tv_vis.setText(svis);
+        tv_pres.setText(spres);
     }
 }

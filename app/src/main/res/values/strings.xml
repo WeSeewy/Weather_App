@@ -6,4 +6,19 @@
     <string name="bt_txt_more">more</string>
     <string name="item_settings">settings</string>
     <string name="item_loc_in_map">loc in map</string>
+    <string name="nav_location">location</string>
+    <string name="temperature_unit">temperature unit</string>
+    <string name="weather_notification">Weather Notification</string>
+    <string name="location">location</string>
+    <string name="centigrade">centigrade</string>
+    <string name="fahrenheit">fahrenheit</string>
+    <string name="weather_notify">weather notify</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="share">share</string>
+    <string name="settings_up">SETTINGS</string>
+    <string name="du">°</string>
+    <string name="temperature_units">Temperature Units</string>
+    <string name="enable">enable</string>
+    <string name="disable">disable</string>
 </resources>

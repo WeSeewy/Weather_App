@@ -1,6 +1,12 @@
 package cn.weseewe.android.weatherapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,48 +16,50 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import cn.weseewe.android.weatherapp.gson.Weather;
+import cn.weseewe.android.weatherapp.gson.DailyForecast;
+import cn.weseewe.android.weatherapp.service.AutoUpdateService;
+import cn.weseewe.android.weatherapp.util.Utility;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import cn.weseewe.android.weatherapp.gson.HeWeather6;
+import cn.weseewe.android.weatherapp.util.HttpUtil;
+
+import static android.content.Context.MODE_PRIVATE;
+import static cn.weseewe.android.weatherapp.MainActivity.SPKEY_SPSETTING;
 
 public class WeatherListFragment extends Fragment {
-    boolean misTwoPane;
+    private static String PACKAGE="cn.weseewe.android.weatherapp";
 
+    private RecyclerView mWeatherListRecyclerView;
+    private WeatherAdapter mAdapter;
+    private SharedPreferences sp_setting;
+
+    boolean misTwoPane;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.weather_list_frag,container,false);
 
-        RecyclerView weatherListRecyclerView=(RecyclerView) view.findViewById(R.id.weather_list_recycler_view);
+        mWeatherListRecyclerView=(RecyclerView) view.findViewById(R.id.weather_list_recycler_view);
+        mWeatherListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//??
 
-        //todo set data for topview
-        //write data
-        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
-        weatherListRecyclerView.setLayoutManager(layoutManager);
-        WeatherAdapter adapter=new WeatherAdapter(getWeathers());
-        weatherListRecyclerView.setAdapter(adapter);
+        sp_setting= getActivity().getSharedPreferences(SPKEY_SPSETTING,MODE_PRIVATE);
 
         return view;
-    }
-
-    private List<Weather> getWeathers(){
-        List<Weather> weatherList=new ArrayList<>();
-        for(int i=1;i<=50;i++){
-            Weather wt=new Weather();
-            wt.setDate(new Date());
-            wt.setTmp(i+"");
-            wt.setCond_txt("sunny");
-            wt.setHum("19");
-            weatherList.add(wt);
-        }
-        return weatherList;
     }
 
     @Override
@@ -65,34 +73,89 @@ public class WeatherListFragment extends Fragment {
     }
 
 
-    class WeatherAdapter extends RecyclerView.Adapter <WeatherAdapter.ViewHolder>{
-        private List<Weather> mWeatherList;
 
+    /**
+     * 处理并展示七天天气数据。
+     */
+    public void showWeatherInfo(HeWeather6 wt){
+        mAdapter = new WeatherAdapter(wt.forecastList);
+        mWeatherListRecyclerView.setAdapter(mAdapter);
+
+        Intent intent = new Intent(getActivity(), AutoUpdateService.class);
+        getActivity().startService(intent);
+    }
+
+
+    class WeatherAdapter extends RecyclerView.Adapter <WeatherAdapter.ViewHolder>{
+        private List<DailyForecast> mWeatherList=new ArrayList<>();
+
+        public WeatherAdapter(List<DailyForecast> weathers){
+            for(int i=1;i<weathers.size();i++){
+                mWeatherList.add(weathers.get(i));
+            }
+        }
         // holder
         class ViewHolder extends RecyclerView.ViewHolder{
             ImageView iv_img;
-            TextView tv_cond,tv_date,tv_temp;
+            TextView tv_cond,tv_date,tv_temp_max,tv_temp_min;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 iv_img=(ImageView)itemView.findViewById(R.id.list_cond_img);
                 tv_cond=(TextView)itemView.findViewById(R.id.list_cond);
                 tv_date=(TextView)itemView.findViewById(R.id.list_date);
-                tv_temp=(TextView)itemView.findViewById(R.id.list_temp);
+                tv_temp_max=(TextView)itemView.findViewById(R.id.list_temp_max);
+                tv_temp_min=(TextView)itemView.findViewById(R.id.list_temp_min);
             }
 
-            public void bind(Weather wt){
-                // todo iv_img display
-                // todo temp unit
-                tv_date.setText(new SimpleDateFormat("EEE  MMM dd", Locale.US).format(new Date()));
-                tv_cond.setText(wt.getCond_txt());
-                tv_temp.setText(wt.getTmp()+"°C");
+            public void bind(DailyForecast wt){
+                iv_img.setImageResource(getDrawResourceID("i"+wt.cond_code));
+
+                tv_cond.setText(wt.cond_txt);
+
+                String temp_unit=sp_setting.getString(MainActivity.SPKEY_TEMPUNIT,"C");
+                String tmax=wt.tmp_max+"°";
+                String tmin=wt.tmp_min+"°";
+                if (temp_unit.equals("F")) {
+                    int itmax=Integer.valueOf(wt.tmp_max);
+                    int itmin=Integer.valueOf(wt.tmp_min);
+                    itmax=itmax*5/9+32;
+                    itmin=itmin*5/9+32;
+                    tmax=itmax+"°";
+                    tmin=itmin+"°";
+                }
+                tv_temp_max.setText(tmax);
+                tv_temp_min.setText(tmin);
+
+                try {
+                    SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+                    Date date_cur=simpleDateFormat.parse(wt.ddate);
+                    String cur=new SimpleDateFormat("yyyyMMdd", Locale.US).format(date_cur);
+
+                    Date date_today=new Date();
+                    String today=new SimpleDateFormat("yyyyMMdd", Locale.US).format(date_today);
+
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(new Date());
+                    calendar.add(calendar.DATE,1);
+                    Date date_tomor=calendar.getTime();
+                    String tomor=new SimpleDateFormat("yyyyMMdd", Locale.US).format(date_tomor);
+
+                    String sdate="";
+                    if(cur.compareTo(tomor)==0){
+                        sdate="Tomorrow";
+                    }else if(cur.compareTo(today)==0){
+                        sdate="Today "+new SimpleDateFormat("EEE", Locale.US).format(date_cur);
+                    }else {
+                        sdate=new SimpleDateFormat("EEE", Locale.US).format(date_cur);
+                    }
+                    tv_date.setText(sdate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
-        public WeatherAdapter(List<Weather> weathers){
-            mWeatherList=weathers;
-        }
 
         @NonNull
         @Override
@@ -104,12 +167,14 @@ public class WeatherListFragment extends Fragment {
             view.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Weather wt=mWeatherList.get(holder.getAdapterPosition());
+                    DailyForecast wt=mWeatherList.get(holder.getAdapterPosition());
                     if(misTwoPane){
+
                         WeatherContentFragment weatherContentFragment=
                                 (WeatherContentFragment)getFragmentManager()
                                 .findFragmentById(R.id.weather_content_fragment);
                         weatherContentFragment.refresh(wt);
+                        weatherContentFragment.setTextColor(Color.BLACK);
 
                         WeatherContentMoreFragment weatherContentMoreFragment=
                                 (WeatherContentMoreFragment)getFragmentManager()
@@ -126,7 +191,7 @@ public class WeatherListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull WeatherAdapter.ViewHolder holder, int i) {
-            Weather wt=mWeatherList.get(i);
+            DailyForecast wt=mWeatherList.get(i);
             holder.bind(wt);
         }
 
@@ -135,5 +200,9 @@ public class WeatherListFragment extends Fragment {
             return mWeatherList.size();
         }
 
+    }
+    public int getDrawResourceID(String resourceName) {
+        return getResources()
+                .getIdentifier(resourceName, "drawable", PACKAGE);
     }
 }

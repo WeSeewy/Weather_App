@@ -2,21 +2,16 @@ package cn.weseewe.android.weatherapp.gson;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Basic {
+import org.litepal.crud.DataSupport;
 
-    @SerializedName("city")
-    public String cityName;
+import java.io.Serializable;
 
-    @SerializedName("id")
-    public String weatherId;
+public class Basic implements Serializable {
 
-    public Update update;
+    @SerializedName("location")
+    public String loc;
 
-    public class Update {
-
-        @SerializedName("loc")
-        public String updateTime;
-
-    }
+    @SerializedName("cid")
+    public String cid;
 
 }

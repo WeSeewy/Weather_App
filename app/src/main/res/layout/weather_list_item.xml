@@ -9,8 +9,8 @@
         android:id="@+id/list_cond_img"
         android:src="@drawable/ic_home"
         android:layout_marginStart="5dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_gravity="center_vertical|start" />
     <LinearLayout
         android:orientation="vertical"
@@ -26,7 +26,7 @@
             android:fontFamily="sans-serif-condensed"
             android:text="Mon  Dec 6"
             android:textColor="@color/black"
-            android:textSize="23sp" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/list_cond"
@@ -35,19 +35,33 @@
             android:fontFamily="sans-serif-condensed"
             android:text="cloudy"
             android:textColor="@color/gray"
-            android:textSize="18sp" />
+            android:textSize="19sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/list_temp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="5dp"
-        android:fontFamily="cursive"
+    <LinearLayout
         android:gravity="end"
-        android:text="15°C"
-        android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:orientation="vertical"
+        android:layout_marginEnd="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/list_temp_max"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="cursive"
+            android:gravity="end"
+            android:text="15°"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+        <TextView
+            android:id="@+id/list_temp_min"
+            android:text="14°"
+            android:textSize="19sp"
+            android:fontFamily="cursive"
+            android:gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -15,21 +15,23 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:gravity="top"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/detail_tmp"
+                    android:id="@+id/detail_tmp_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:layout_gravity="bottom"
+                    android:fontFamily="cursive"
                     android:text="11"
                     android:textColor="@android:color/black"
                     android:textSize="60sp" />
@@ -40,19 +42,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="top"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/temp_c"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/du"
                     android:textSize="25sp" />
 
+                <TextView
+                    android:id="@+id/detail_tmp_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="cursive"
+                    android:text="9"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/detail_tmp_unit2"
+                    android:layout_marginStart="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:layout_marginTop="27dp"
+                    android:text="@string/temp_c"
+                    android:textSize="20sp" />
             </LinearLayout>
 
+
             <TextView
-                android:id="@+id/detail_condi"
+                android:id="@+id/detail_loc_cond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
-                android:textSize="25sp"
-                android:text="多云"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:fontFamily="sans-serif"
+                android:text="长沙 多云"
+                android:textSize="23sp" />
+
             <TextView
                 android:id="@+id/detail_date"
                 android:layout_width="wrap_content"
@@ -63,21 +88,20 @@
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/detail_loc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:fontFamily="sans-serif-condensed"
-                android:text="chang sha"
-                android:textSize="20sp" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/detail_img_condi"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:background="@color/lightgray"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/detail_img_condi"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"/>
+
+
         </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>
