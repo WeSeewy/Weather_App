@@ -35,13 +35,15 @@
         android:id="@+id/set_centigrade"
         android:clickable="true"
         android:orientation="vertical"
+        android:layout_marginStart="20dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:focusable="true">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/centigrade"
@@ -57,13 +59,15 @@
         android:id="@+id/set_fahrenheit"
         android:clickable="true"
         android:orientation="vertical"
+        android:layout_marginStart="20dp"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:focusable="true">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/fahrenheit"

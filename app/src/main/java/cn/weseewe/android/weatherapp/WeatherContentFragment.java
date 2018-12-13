@@ -81,6 +81,17 @@ public class WeatherContentFragment extends Fragment {
     public void refresh(DailyForecast wt){
         Log.d(TAG,"refresh(wt)");
         mwt=wt;
+
+        if(getActivity().findViewById(R.id.weather_content_more_fragment)==null){
+            setTextColor(Color.WHITE);
+        }else{
+            setTextColor(Color.BLACK);
+            WeatherContentMoreFragment weatherContentMoreFragment= (WeatherContentMoreFragment) getActivity()
+                    .getSupportFragmentManager()
+                    .findFragmentById(R.id.weather_content_more_fragment);
+            weatherContentMoreFragment.refresh(mwt);
+        }
+
         String cond=wt.cond_txt;
         String loc=sp_setting.getString(MainActivity.SPKEY_LOCATION,"长沙");
         String tmax=wt.tmp_max;
@@ -134,7 +145,7 @@ public class WeatherContentFragment extends Fragment {
     public void showShareDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("选择分享类型");
-        builder.setItems(new String[]{"邮件","短信","其他"}, new DialogInterface.OnClickListener() {
+        builder.setItems(new String[]{"邮件","短信"}, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -144,17 +155,6 @@ public class WeatherContentFragment extends Fragment {
                         sendMail();break;
                     case 1: //短信
                         sendSMS();break;
-                    case 3: //调用系统分享
-                        Intent intent=new Intent(Intent.ACTION_SEND);
-                        intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_SUBJECT,"分享");
-                        intent.putExtra(Intent.EXTRA_TEXT,
-                                sp_setting.getString(MainActivity.SPKEY_LOCATION,"长沙")
-                                        +mwt.ddate+"的天气是"+mwt.cond_txt+"。气温最高"+mwt.tmp_max+"度，最低"+mwt.tmp_min
-                                        +"度注意保暖哦~我正在用叶子天气,觉得不错,推荐给你~ ");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(Intent.createChooser(intent, "share"));
-                        break;
                     default: break;
                 }
 

@@ -47,8 +47,8 @@ public class WeatherContentMoreFragment extends Fragment {
 
 
         String swind="风："+wind_sc+" "+wind_dir+" "+wind_spd+"km/h";
-        String shum="湿度："+hum+"%";
-        String svis="能见度："+vis+"km";
+        String shum= "湿度："+hum+"%";
+        String svis= "能见度："+vis+"km";
         String spres="大气压强："+pres+"hPa";
         tv_wind.setText(swind);
         tv_hum.setText(shum);

@@ -50,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sp_setting;
 
-    private WeatherContentFragment weatherContentFragment;
     private WeatherListFragment weatherListFragment;
+    private WeatherContentFragment weatherContentFragment;
+    private WeatherContentMoreFragment weatherContentMoreFragment;
 
     private List<Weather> wts=new ArrayList<>();
 
@@ -67,18 +68,20 @@ public class MainActivity extends AppCompatActivity {
 
         sp_setting= getSharedPreferences(SPKEY_SPSETTING,MODE_PRIVATE);
         LitePal.getDatabase();
-        weatherContentFragment = (WeatherContentFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.weather_content_fragment);
         weatherListFragment= (WeatherListFragment)getSupportFragmentManager()
-                        .findFragmentById(R.id.weather_list_fragment);
+                .findFragmentById(R.id.weather_list_fragment);
+        weatherContentFragment = (WeatherContentFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.weather_content_fragment);
+        weatherContentMoreFragment = (WeatherContentMoreFragment)getSupportFragmentManager()
+                .findFragmentById(R.id.weather_content_more_fragment);
 
-        if (!weatherListFragment.misTwoPane){
-            weatherContentFragment.setTextColor(Color.WHITE);
-        }else{
-            weatherContentFragment.setTextColor(Color.BLACK);
-            Button bt_share=(Button)findViewById(R.id.share);
-            bt_share.setVisibility(View.VISIBLE);
-        }
+//        if (!weatherListFragment.misTwoPane){
+//            weatherContentFragment.setTextColor(Color.WHITE);
+//        }else{
+//            weatherContentFragment.setTextColor(Color.BLACK);
+//            Button bt_share=(Button)findViewById(R.id.share);
+//            bt_share.setVisibility(View.VISIBLE);
+//        }
 
         // 查询天气 更新界面
         String mloc=sp_setting.getString(SPKEY_LOCATION,"北京");
@@ -91,12 +94,10 @@ public class MainActivity extends AppCompatActivity {
             HeWeather6 wt=Utility.handleWeatherResponse(wts.get(0).getJson_txt());
             weatherListFragment.showWeatherInfo(wt);
             weatherContentFragment.refresh(wt.forecastList.get(0));
+            if(weatherListFragment.misTwoPane){
+                weatherContentMoreFragment.refresh(wt.forecastList.get(0));
+            }
         }
-    }
-    public int getDrawResourceID(String resourceName) {
-        Resources res=getResources();
-        int picid = res.getIdentifier(resourceName,"drawable",getPackageName());
-        return picid;
     }
 
     /**
@@ -127,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
                             // 更新界面
                             weatherListFragment.showWeatherInfo(weather);
                             weatherContentFragment.refresh(weather.forecastList.get(0));
+                            if(weatherListFragment.misTwoPane){
+                                weatherContentMoreFragment.refresh(weather.forecastList.get(0));
+                            }
                         } else {
                             Toast.makeText(MainActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
                         }

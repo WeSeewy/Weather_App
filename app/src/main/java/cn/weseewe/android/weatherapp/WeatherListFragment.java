@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import static cn.weseewe.android.weatherapp.MainActivity.SPKEY_SPSETTING;
 
 public class WeatherListFragment extends Fragment {
     private static String PACKAGE="cn.weseewe.android.weatherapp";
+    private static String TAG="WeatherListFragment";
 
     private RecyclerView mWeatherListRecyclerView;
     private WeatherAdapter mAdapter;
@@ -90,9 +92,18 @@ public class WeatherListFragment extends Fragment {
         private List<DailyForecast> mWeatherList=new ArrayList<>();
 
         public WeatherAdapter(List<DailyForecast> weathers){
-            for(int i=1;i<weathers.size();i++){
+            if(getActivity().findViewById(R.id.detail_more_layout)!=null){
+                misTwoPane=true;
+            }else {
+                misTwoPane=false;
+            }
+            Log.d(TAG,"fasssssssssssssssssssssssssssssssssssssss");
+            Log.d(TAG,"wts:"+weathers.size()+"istwopane:"+misTwoPane);
+            for(int i=0;i<weathers.size();i++){
+                if (!misTwoPane && i==0) continue;
                 mWeatherList.add(weathers.get(i));
             }
+            Log.d(TAG,"mwts:"+mWeatherList.size());
         }
         // holder
         class ViewHolder extends RecyclerView.ViewHolder{
@@ -169,12 +180,10 @@ public class WeatherListFragment extends Fragment {
                 public void onClick(View v) {
                     DailyForecast wt=mWeatherList.get(holder.getAdapterPosition());
                     if(misTwoPane){
-
                         WeatherContentFragment weatherContentFragment=
                                 (WeatherContentFragment)getFragmentManager()
                                 .findFragmentById(R.id.weather_content_fragment);
                         weatherContentFragment.refresh(wt);
-                        weatherContentFragment.setTextColor(Color.BLACK);
 
                         WeatherContentMoreFragment weatherContentMoreFragment=
                                 (WeatherContentMoreFragment)getFragmentManager()
@@ -191,12 +200,14 @@ public class WeatherListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull WeatherAdapter.ViewHolder holder, int i) {
+            Log.d(TAG,"i:  "+i);
             DailyForecast wt=mWeatherList.get(i);
             holder.bind(wt);
         }
 
         @Override
         public int getItemCount() {
+            Log.d(TAG,"getItemcount():"+mWeatherList.size());
             return mWeatherList.size();
         }
 
