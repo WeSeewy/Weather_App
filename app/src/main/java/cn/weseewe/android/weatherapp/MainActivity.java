@@ -1,26 +1,16 @@
 package cn.weseewe.android.weatherapp;
 
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import org.litepal.LitePal;
@@ -30,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.weseewe.android.weatherapp.db.Settings;
 import cn.weseewe.android.weatherapp.db.Weather;
 import cn.weseewe.android.weatherapp.gson.HeWeather6;
 import cn.weseewe.android.weatherapp.settings.SettingActivity;

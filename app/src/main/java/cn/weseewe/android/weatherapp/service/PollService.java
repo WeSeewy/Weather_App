@@ -65,12 +65,10 @@ public class PollService extends IntentService {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if(isOn){
-            Log.d(TAG,"set          2");
             alarmManager.setRepeating(
                     AlarmManager.ELAPSED_REALTIME
                     , SystemClock.elapsedRealtime(), POLL_INTERVAL, pi);
         }else{
-            Log.d(TAG,"set          3");
             alarmManager.cancel(pi);
             pi.cancel();
         }
